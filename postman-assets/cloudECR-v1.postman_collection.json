@@ -1,0 +1,700 @@
+{
+	"info": {
+		"_postman_id": "2dfecf43-35c6-46ff-9519-54861233440a",
+		"name": "cloudECR-v1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11835322"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "auth/login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"let formData = pm.request.body.urlencoded?.all();\r",
+									"\r",
+									"if (!formData) return\r",
+									"\r",
+									"let posId = formData.find(item => item.key === \"posId\")?.value;\r",
+									"\r",
+									"if (posId) {\r",
+									"    pm.collectionVariables.set(\"posId\", posId);\r",
+									"}\r",
+									"\r",
+									"if (response.access) {\r",
+									"    pm.collectionVariables.set(\"authToken\", response.access.token);\r",
+									"    pm.collectionVariables.set(\"refreshToken\", response.refresh.token);\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "posId",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{cloudecr_base_url}}/auth/login",
+							"host": [
+								"{{cloudecr_base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "auth/refresh",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{refreshToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{cloudecr_base_url}}/auth/refresh",
+							"host": [
+								"{{cloudecr_base_url}}"
+							],
+							"path": [
+								"auth",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "API",
+			"item": [
+				{
+					"name": "api/terminals",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{cloudecr_base_url}}/api/terminals",
+							"host": [
+								"{{cloudecr_base_url}}"
+							],
+							"path": [
+								"api",
+								"terminals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "api/ewallet-channels",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{cloudecr_base_url}}/api/ewallet-channels?currency=MYR",
+							"host": [
+								"{{cloudecr_base_url}}"
+							],
+							"path": [
+								"api",
+								"ewallet-channels"
+							],
+							"query": [
+								{
+									"key": "currency",
+									"value": "MYR"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "api/bind-terminal-key",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{cloudecr_base_url}}/api/bind-terminal-key",
+							"host": [
+								"{{cloudecr_base_url}}"
+							],
+							"path": [
+								"api",
+								"bind-terminal-key"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "api/prebind-terminals",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{cloudecr_base_url}}/api/prebind-terminals",
+							"host": [
+								"{{cloudecr_base_url}}"
+							],
+							"path": [
+								"api",
+								"prebind-terminals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "api/prebind-terminals",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"uniqueIds\": [\n        \"\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{cloudecr_base_url}}/api/prebind-terminals",
+							"host": [
+								"{{cloudecr_base_url}}"
+							],
+							"path": [
+								"api",
+								"prebind-terminals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[sale] api/transfer",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const datetime = eval(pm.collectionVariables.get(\"datetime\"));\r",
+									"const signPayload = eval(pm.collectionVariables.get(\"signPayload\"));\r",
+									"const transData = eval(pm.collectionVariables.get(\"transData\"));\r",
+									"\r",
+									"const data = {\r",
+									"    \"transType\": \"sale\",\r",
+									"    \"merchantId\": pm.collectionVariables.get(\"merchantId\"),\r",
+									"    \"posId\": pm.collectionVariables.get(\"posId\"),\r",
+									"    \"deviceId\": pm.collectionVariables.get(\"deviceId\"),\r",
+									"    \"apiVersion\": pm.collectionVariables.get(\"apiVersion\"),\r",
+									"    \"referenceId\": \"DEV\" + Date.now().toString(36).toUpperCase(),\r",
+									"    \"datetime\": datetime(),\r",
+									"    \"transData\": {\r",
+									"        \"transAmt\": \"1.10\",\r",
+									"        \"note\": \"abcdefghijklmnopqrstuvwxyz\",\r",
+									"\t\t...transData()\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"data.signature = signPayload(data);\r",
+									"pm.collectionVariables.set(\"transferPayload\", JSON.stringify(data));\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"if (response?.transData?.transId) {\r",
+									"    pm.collectionVariables.set(\"recentTransId\", response.transData.transId)\r",
+									"    pm.collectionVariables.set(\"recentPaymentChannel\", response.transData.paymentChannel)\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{transferPayload}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{cloudecr_base_url}}/api/transfer",
+							"host": [
+								"{{cloudecr_base_url}}"
+							],
+							"path": [
+								"api",
+								"transfer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[void] api/transfer",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const datetime = eval(pm.collectionVariables.get(\"datetime\"));\r",
+									"const signPayload = eval(pm.collectionVariables.get(\"signPayload\"));\r",
+									"\r",
+									"const data = {\r",
+									"    \"transType\": \"void\",\r",
+									"    \"merchantId\": pm.collectionVariables.get(\"merchantId\"),\r",
+									"    \"posId\": pm.collectionVariables.get(\"posId\"),\r",
+									"    \"deviceId\": pm.collectionVariables.get(\"deviceId\"),\r",
+									"    \"apiVersion\": pm.collectionVariables.get(\"apiVersion\"),\r",
+									"    \"referenceId\": \"DEV\" + Date.now().toString(36).toUpperCase(),\r",
+									"    \"datetime\": datetime(),\r",
+									"    \"transData\": {\r",
+									"        \"transId\": pm.collectionVariables.get(\"recentTransId\")\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"data.signature = signPayload(data);\r",
+									"pm.collectionVariables.set(\"transferPayload\", JSON.stringify(data));\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{transferPayload}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{cloudecr_base_url}}/api/transfer",
+							"host": [
+								"{{cloudecr_base_url}}"
+							],
+							"path": [
+								"api",
+								"transfer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[getLast] api/transfer",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const datetime = eval(pm.collectionVariables.get(\"datetime\"));\r",
+									"const signPayload = eval(pm.collectionVariables.get(\"signPayload\"));\r",
+									"\r",
+									"const data = {\r",
+									"    \"transType\": \"getLast\",\r",
+									"    \"merchantId\": pm.collectionVariables.get(\"merchantId\"),\r",
+									"    \"posId\": pm.collectionVariables.get(\"posId\"),\r",
+									"    \"deviceId\": pm.collectionVariables.get(\"deviceId\"),\r",
+									"    \"apiVersion\": pm.collectionVariables.get(\"apiVersion\"),\r",
+									"    \"referenceId\": \"DEV\" + Date.now().toString(36).toUpperCase(),\r",
+									"    \"datetime\": datetime()\r",
+									"}\r",
+									"\r",
+									"data.signature = signPayload(data);\r",
+									"pm.collectionVariables.set(\"transferPayload\", JSON.stringify(data));\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{transferPayload}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{cloudecr_base_url}}/api/transfer",
+							"host": [
+								"{{cloudecr_base_url}}"
+							],
+							"path": [
+								"api",
+								"transfer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[walletInquiry] api/transfer",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const datetime = eval(pm.collectionVariables.get(\"datetime\"));\r",
+									"const signPayload = eval(pm.collectionVariables.get(\"signPayload\"));\r",
+									"\r",
+									"const data = {\r",
+									"    \"transType\": \"walletInquiry\",\r",
+									"    \"merchantId\": pm.collectionVariables.get(\"merchantId\"),\r",
+									"    \"posId\": pm.collectionVariables.get(\"posId\"),\r",
+									"    \"deviceId\": pm.collectionVariables.get(\"deviceId\"),\r",
+									"    \"apiVersion\": pm.collectionVariables.get(\"apiVersion\"),\r",
+									"    \"referenceId\": \"DEV\" + Date.now().toString(36).toUpperCase(),\r",
+									"    \"datetime\": datetime(),\r",
+									"    \"transData\": {\r",
+									"        \"originalDatetime\": \"20250411164215\"\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"data.signature = signPayload(data);\r",
+									"pm.collectionVariables.set(\"transferPayload\", JSON.stringify(data));\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{transferPayload}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{cloudecr_base_url}}/api/transfer",
+							"host": [
+								"{{cloudecr_base_url}}"
+							],
+							"path": [
+								"api",
+								"transfer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[print] api/transfer",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const datetime = eval(pm.collectionVariables.get(\"datetime\"));\r",
+									"const signPayload = eval(pm.collectionVariables.get(\"signPayload\"));\r",
+									"\r",
+									"const data = {\r",
+									"    \"transType\": \"print\",\r",
+									"    \"merchantId\": pm.collectionVariables.get(\"merchantId\"),\r",
+									"    \"posId\": pm.collectionVariables.get(\"posId\"),\r",
+									"    \"deviceId\": pm.collectionVariables.get(\"deviceId\"),\r",
+									"    \"apiVersion\": pm.collectionVariables.get(\"apiVersion\"),\r",
+									"    \"referenceId\": \"DEV\" + Date.now().toString(36).toUpperCase(),\r",
+									"    \"datetime\": datetime(),\r",
+									"    \"transData\": {\r",
+									"        \"transId\": pm.collectionVariables.get(\"recentTransId\")\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"data.signature = signPayload(data);\r",
+									"pm.collectionVariables.set(\"transferPayload\", JSON.stringify(data));\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{transferPayload}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{cloudecr_base_url}}/api/transfer",
+							"host": [
+								"{{cloudecr_base_url}}"
+							],
+							"path": [
+								"api",
+								"transfer"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{authToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					"pm.collectionVariables.set(\r",
+					"  \"datetime\",\r",
+					"  `const datetime = () => new Date().toISOString().replace(/\\\\D/g, '').substring(0, 14); datetime;`\r",
+					");\r",
+					"\r",
+					"pm.collectionVariables.set('transData', `\r",
+					"    const transData = () => {\r",
+					"        const idx = Math.floor(Math.random() * 3)\r",
+					"        const data = [\r",
+					"            {\"paymentMethod\": \"qrCustScan\", \"paymentChannel\": \"TnG\"},\r",
+					"            {\"paymentMethod\": \"qrMercScan\"},\r",
+					"            {\"paymentMethod\": \"bankCard\"}\r",
+					"        ]\r",
+					"\r",
+					"        return data[idx]\r",
+					"    };\r",
+					"    transData;\r",
+					"`)\r",
+					"\r",
+					"pm.collectionVariables.set(\"signPayload\", `\r",
+					"  const signPayload = (payload) => {\r",
+					"    const CryptoJS = require(\"crypto-js\");  \r",
+					"\r",
+					"    const flattenObject = (object) => {\r",
+					"      let result = [];\r",
+					"      for (let key in object) {\r",
+					"        if (typeof object[key] === 'object' && object[key] !== null)\r",
+					"          result = result.concat(flattenObject(object[key]));\r",
+					"        else result.push(object[key]);\r",
+					"      }\r",
+					"      return result;\r",
+					"    };\r",
+					"\r",
+					"    const flattenedArray = flattenObject(payload);\r",
+					"    const _payload = flattenedArray.sort().join('');\r",
+					"\r",
+					"    return CryptoJS.HmacSHA256(_payload, pm.collectionVariables.get(\"secretKey\")).toString(\r",
+					"      CryptoJS.enc.Hex\r",
+					"    );\r",
+					"  };\r",
+					"  signPayload;\r",
+					"`);\r",
+					"\r",
+					"\r",
+					"\r",
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "authToken",
+			"value": ""
+		},
+		{
+			"key": "refreshToken",
+			"value": ""
+		},
+		{
+			"key": "secretKey",
+			"value": ""
+		},
+		{
+			"key": "posId",
+			"value": ""
+		},
+		{
+			"key": "merchantId",
+			"value": ""
+		},
+		{
+			"key": "apiVersion",
+			"value": "v1"
+		},
+		{
+			"key": "referenceId",
+			"value": ""
+		},
+		{
+			"key": "deviceId",
+			"value": ""
+		},
+		{
+			"key": "recentTransId",
+			"value": ""
+		},
+		{
+			"key": "recentPaymentChannel",
+			"value": ""
+		},
+		{
+			"key": "datetime",
+			"value": ""
+		},
+		{
+			"key": "transData",
+			"value": ""
+		},
+		{
+			"key": "signPayload",
+			"value": ""
+		},
+		{
+			"key": "transferPayload",
+			"value": ""
+		}
+	]
+}
